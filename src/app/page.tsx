@@ -1,103 +1,158 @@
-import Image from "next/image";
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { CalendarIcon } from "lucide-react";
 
-export default function Home() {
+const tabs = [
+  { name: "Overview", href: "/" },
+  { name: "Opportunities", href: "/opportunities", notification: 3 },
+  { name: "Calendly", href: "/calendly", notification: 2 },
+];
+
+export default function Dashboard() {
+  const pathname = usePathname();
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-background p-6 md:p-10">
+      {/* Navigation Tabs */}
+      <div className="mb-6">
+        <div className="bg-muted text-muted-foreground inline-flex h-12 items-center rounded-lg p-[3px]">
+          {tabs.map((tab) => (
+            <Link
+              key={tab.name}
+              href={tab.href}
+              className={`relative z-0 px-6 py-2 rounded-md text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${pathname === tab.href ? "bg-background text-foreground shadow" : "hover:text-foreground"}`}
+            >
+              {tab.name}
+              {tab.notification && (
+                <span className="absolute -top-1.5 -right-3 bg-red-500 text-white text-[10px] rounded-full px-1 py-0.5 font-bold shadow pointer-events-none z-10 min-w-[16px] h-[16px] flex items-center justify-center">{tab.notification}</span>
+              )}
+            </Link>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      {/* Dashboard Title & Controls */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center border rounded-md px-3 py-1 text-sm bg-background">
+            <CalendarIcon className="w-4 h-4 mr-2" />
+            Jan 20, 2023 - Feb 09, 2023
+          </div>
+          <Button>Download</Button>
+        </div>
+      </div>
+      {/* Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-xs text-muted-foreground mb-2 flex items-center justify-between">
+              Total Revenue <span>$</span>
+            </div>
+            <div className="text-2xl font-bold">$45,231.89</div>
+            <div className="text-xs text-muted-foreground">+20.1% from last month</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-xs text-muted-foreground mb-2 flex items-center justify-between">
+              Subscriptions <span>📈</span>
+            </div>
+            <div className="text-2xl font-bold">+2350</div>
+            <div className="text-xs text-muted-foreground">+180.1% from last month</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-xs text-muted-foreground mb-2 flex items-center justify-between">
+              Sales <span>🛒</span>
+            </div>
+            <div className="text-2xl font-bold">+12,234</div>
+            <div className="text-xs text-muted-foreground">+19% from last month</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-xs text-muted-foreground mb-2 flex items-center justify-between">
+              Active Now <span>📊</span>
+            </div>
+            <div className="text-2xl font-bold">+573</div>
+            <div className="text-xs text-muted-foreground">+201 since last hour</div>
+          </CardContent>
+        </Card>
+      </div>
+      {/* Overview & Recent Sales */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="md:col-span-2">
+          <CardContent className="p-6">
+            <div className="font-semibold mb-4">Overview</div>
+            {/* Placeholder for chart */}
+            <div className="h-56 flex items-end gap-2">
+              {[1500, 3200, 2500, 900, 3700, 2200, 4800, 4900, 4500, 4100, 3900, 4000].map((v, i) => (
+                <div
+                  key={i}
+                  className="flex-1 bg-foreground/80 rounded-t-md"
+                  style={{ height: `${(v / 6000) * 100}%` }}
+                  title={`$${v}`}
+                />
+              ))}
+            </div>
+            <div className="flex justify-between text-xs text-muted-foreground mt-2">
+              <span>$0</span>
+              <span>$1500</span>
+              <span>$3000</span>
+              <span>$4500</span>
+              <span>$6000</span>
+            </div>
+            <div className="flex justify-between text-xs text-muted-foreground mt-2">
+              <span>Jan</span>
+              <span>Feb</span>
+              <span>Mar</span>
+              <span>Apr</span>
+              <span>May</span>
+              <span>Jun</span>
+              <span>Jul</span>
+              <span>Aug</span>
+              <span>Sep</span>
+              <span>Oct</span>
+              <span>Nov</span>
+              <span>Dec</span>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="font-semibold mb-4">Recent Sales</div>
+            <div className="text-xs text-muted-foreground mb-2">You made 265 sales this month.</div>
+            <Separator className="mb-2" />
+            <div className="flex flex-col gap-4">
+              {[
+                { name: "Olivia Martin", email: "olivia.martin@email.com", amount: 1999 },
+                { name: "Jackson Lee", email: "jackson.lee@email.com", amount: 39 },
+                { name: "Isabella Nguyen", email: "isabella.nguyen@email.com", amount: 299 },
+                { name: "William Kim", email: "will@email.com", amount: 99 },
+                { name: "Sofia Davis", email: "sofia.davis@email.com", amount: 39 },
+              ].map((sale, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="w-8 h-8">
+                      <AvatarFallback>{sale.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="font-medium text-sm">{sale.name}</div>
+                      <div className="text-xs text-muted-foreground">{sale.email}</div>
+                    </div>
+                  </div>
+                  <div className="font-medium text-sm">+${sale.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
